@@ -6,7 +6,7 @@ app.set('view engine','ejs')
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get(("/"),(req,res)=>{
-    res.render('user/signup');
+    res.render('user/wishlist');
 })
 app.listen(2000,()=>
 console.log("Server is running"), 
