@@ -29,7 +29,8 @@ router.get("/my-account",userController.loadMyAccount)
 router.get("/wishlist",userController.loadWishlist)
 
 // sign up
-
+router.get("/signup",userController.loadSignup)
+router.post("/signup",userController.signUp)
 
 
 
