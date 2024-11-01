@@ -1,37 +1,11 @@
-
 const User = require("../models/userModel");
-const UserOTPVerification = require("../models/otpmodel")
+const OTP = require("../models/otpmodel")
 const bcrypt = require("bcrypt");
-
-
+const otpGenerator = require('otp-generator');
+ 
 //route to home 
 
 
-const signUpUser = async ( req,res) => {
-    try {
-        const {email,password,number} = req.body;
-
-        console.log(req.body,
-            'qwertyuiop'
-        );
-        
-
-        const existingUser = await userSchema.findOne({email});
-
-        if(existingUser){
-            return res.status(400).json({error:'Email already exist'})
-        }
-        // create new user 
-        const newUser = new userSchema ({email,password,number})
-        await newUser.save()
-
-        res.render('home')
-        
-    } catch (error) {
-        console.error('Error registering user',error);
-        res.status(500).json({error:'An error occured while registering user'})
-    }
-}
 
 const loadHome = async (req,res) =>{
     try {
@@ -68,6 +42,15 @@ const loadBlog = async (req,res)=>{
     }
 }
 
+const loadShop = async (req,res)=>{
+    try {
+        res.render('shop');
+    } catch (error) {
+        console.error(error)
+        res.status(500).render('error');
+    }
+}
+
 const loadSignup = async (req,res) =>{
     try {
         res.render("signup")
@@ -76,11 +59,32 @@ const loadSignup = async (req,res) =>{
     }
 }
 
+const loadMyAccount = async (req,res) =>{
+    try {
+        res.render("my-account")
+    } catch (error) {
+        console.log(error)
+        res.status(500).render('error');
+    }
+}
+
+const loadWishlist = async (req,res) =>{
+    try {
+        res.render("wishlist")
+    } catch (error) {
+        console.log(error)
+        res.status(500).render('error');
+    }
+}
+
+
 module.exports = {
     loadHome,
     loadSignup,
-    signUpUser,
     loadAbout,
     loadBlog,
-    loadContact
+    loadContact,
+    loadShop,
+    loadMyAccount,
+    loadWishlist,
 } 

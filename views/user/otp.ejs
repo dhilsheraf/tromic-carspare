@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OTP Verification</title>
+<style>
+    /* Base styles */
+    body, html {
+        height: 100%;
+        margin: 0;
+        font-family: Arial, sans-serif;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #1a1a1a;
+        color: #f5f5f5;
+    }
+
+    /* Container styling */
+    .otp-container {
+        background-color: #2a2a2a;
+        padding: 2rem;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        text-align: center;
+        max-width: 400px;
+        width: 90%;
+    }
+
+    h2 {
+        margin: 0 0 1rem;
+        font-size: 1.5rem;
+    }
+
+    /* OTP input styling */
+    .otp-inputs {
+        display: flex;
+        justify-content: space-between;
+        gap: 8px;
+    }
+
+    .otp-inputs input {
+        width: 40px;
+        height: 40px;
+        text-align: center;
+        font-size: 1.2rem;
+        border: 1px solid #444;
+        border-radius: 5px;
+        background-color: #333;
+        color: #f5f5f5;
+    }
+
+    .otp-inputs input:focus {
+        border-color: #ff4040;
+        outline: none;
+    }
+
+    /* Buttons */
+    .btn {
+        display: inline-block;
+        margin-top: 1.5rem;
+        padding: 10px 20px;
+        font-size: 1rem;
+        font-weight: bold;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .btn-resend {
+        color: #ff4040;
+        background: none;
+        border: none;
+    }
+
+    .btn-resend:hover {
+        color: #ff6060;
+    }
+
+    .btn-verify {
+        color: #fff;
+        background-color: #ff4040;
+        border: none;
+        margin-top: 10px;
+        width: 100%;
+    }
+
+    .btn-verify:hover {
+        background-color: #ff6060;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 400px) {
+        .otp-inputs input {
+            width: 35px;
+            height: 35px;
+        }
+    }
+</style>
+</head>
+<body>
+<form action="">
+<div class="otp-container">
+    <h2>Enter OTP</h2>
+    <div class="otp-inputs">
+        <input type="text" maxlength="1">
+        <input type="text" maxlength="1">
+        <input type="text" maxlength="1">
+        <input type="text" maxlength="1">
+        <input type="text" maxlength="1">
+        <input type="text" maxlength="1">
+    </div>
+    <button class="btn btn-resend">Resend Code</button>
+    <button class="btn btn-verify">Verify</button>
+</div>
+</form>
+
+<script>
+    // Automatically focus on the next input box as user types
+    const otpInputs = document.querySelectorAll('.otp-inputs input');
+
+    otpInputs.forEach((input, index) => {
+        input.addEventListener('input', () => {
+            if (input.value.length === 1 && index < otpInputs.length - 1) {
+                otpInputs[index + 1].focus();
+            }
+        });
+    });
+</script>
+
+</body>
+</html>

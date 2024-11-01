@@ -1,7 +1,6 @@
 const express = require('express');
 // const User = require('../models/userModel') ;
 const userController = require('../controllers/userController')
-const otpController = require('../controllers/otpController')
 
 const router = express();
 
@@ -21,11 +20,24 @@ router.get("/about",userController.loadAbout)
 
 router.get("/blog",userController.loadBlog);
 
-router.get("/contact",userController.loadContact)
+router.get("/shop",userController.loadShop);
+
+router.get("/contact",userController.loadContact);
+
+router.get("/my-account",userController.loadMyAccount)
+
+router.get("/wishlist",userController.loadWishlist)
 
 // sign up
-router.get("/signup",userController.loadSignup)
-router.post("/signup",userController.signUpUser)
 
+
+
+
+//otp
+
+
+// router.post('/send-otp', userController.sendOTP);
+
+ 
 module.exports = router ; 
    
