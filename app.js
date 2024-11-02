@@ -6,6 +6,7 @@ const userRoute = require("./routes/userRoute")
 const session = require('express-session')
 require('dotenv').config()
 const bodyParser = require('body-parser'); 
+const passport = require("./config/passport")
 
 
 const  PORT = process.env.PORT || 8080; 
@@ -22,6 +23,8 @@ app.use(session({
     }
 }))
 
+app.use(passport.initialize());
+app.use(passport.session()) 
 
 app.use(bodyParser.json()); 
 app.set('view engine','ejs')

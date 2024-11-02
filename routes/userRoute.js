@@ -1,7 +1,7 @@
 const express = require('express');
 // const User = require('../models/userModel') ;
 const userController = require('../controllers/userController')
-
+const passport = require("passport")
 const router = express();
 
 
@@ -32,13 +32,19 @@ router.get("/wishlist",userController.loadWishlist)
 router.get("/signup",userController.loadSignup)
 router.post("/signup",userController.signUp)
 
+//login
+router.get("login",userController.loadLogin) 
 
-
+//google authentication
+router.get("/auth/google",passport.authenticate('google',{scope:['profile','email']}))
+router.get("/auth/google/callback",passport.authenticate('google',{failureRedirect:'/signup'}),(req,res)=>{
+    res.redirect('/')
+})
 //otp
+router.post("/verify-otp",userController.verifyOTP)
+router.post("/resend-otp",userController.resendOTP)
 
-
-// router.post('/send-otp', userController.sendOTP);
 
  
-module.exports = router ; 
+module.exports = router ;  
    
