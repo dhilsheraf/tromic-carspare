@@ -35,7 +35,7 @@ app.use(express.urlencoded({ extended: true }));
 connectDB()
 
 
-app.use('/',userRoute) 
+app.use('/',userRoute) ;
 
   
 app.listen(PORT,()=>

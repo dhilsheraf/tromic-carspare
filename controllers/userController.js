@@ -12,16 +12,16 @@ const loadHome = async (req,res) =>{
         res.render('home')
     } catch (error) {
         console.error("Home page not loading",error);
-        res.status(500).render('error')
+        res.status(500).redirect("/pageNotFound")
     }
 }
 
 const loadAbout = async (req,res) =>{
     try {
-        res.render('about')
+        res.render("about")
     } catch (error) {
         console.error(error);
-        res.status(500).render('error')
+        res.status(500).redirect("/pageNotFound")
     }
 }
 
@@ -30,7 +30,7 @@ const loadContact = async (req,res) =>{
         res.render('contact');
     } catch (error) {
         console.error(error);
-        res.status(500).render('error')
+        res.status(500).redirect("/pageNotFound")
     }
 }
 const loadBlog = async (req,res)=>{
@@ -38,7 +38,7 @@ const loadBlog = async (req,res)=>{
         res.render('blog');
     } catch (error) {
         console.error(error)
-        res.status(500).render('error');
+        res.status(500).redirect("/pageNotFound")
     }
 }
 
@@ -47,15 +47,16 @@ const loadShop = async (req,res)=>{
         res.render('shop');
     } catch (error) {
         console.error(error)
-        res.status(500).render('error');
+        res.status(500).redirect("/pageNotFound")
     }
 }
 
 const loadSignup = async (req,res) =>{
-    try {
+    try { 
       return  res.render("signup",{message:""})
     } catch (error) {
         console.log("Home page not loading",error)
+        res.redirect("/pageNotFound")
     }
 }
 
@@ -64,7 +65,7 @@ const loadMyAccount = async (req,res) =>{
         res.render("my-account")
     } catch (error) {
         console.log(error)
-        res.status(500).render('error');
+        res.status(500).redirect("/pageNotFound")
     }
 }
 
@@ -141,7 +142,7 @@ const signUp = async (req, res) => {
 
     } catch (error) {
         console.error("signup error",error);
-        res.render("error")
+        res.redirect("/pageNotFound")
     }
     
 }
@@ -163,27 +164,34 @@ const verifyOTP = async (req,res)=>{
        try {
         const {otp}  = req.body
         console.log(otp)
-
+        
         if(otp === req.session.userOtp){
             const user = req.session.userData
             const passwordHash = await securePassword(user.password);
-
+           console.log("assigning the user data");
+           
             const saveUserData = new User({
                 username:user.username,
                 email:user.email,
                 number:user.number,
-                password:passwordHash
+                password:passwordHash,
             })
+           
             await saveUserData.save();
+            console.log("user data is saved");
+
             req.session.user = saveUserData._id
-            res.json({success:true, redirectUrl:"/"})
+
+            return res.json({success:true, redirectUrl:"/"})
         }else{
+            //invalid otp
             res.status(400).json({ success: false, message:"Invalid OTP, Please try again" })
+            
         }
        } catch (error) {
         
         console.error("Error while verifying the otp",error )
-        res.status(500).json({success:false,message:"An error occured"})
+        res.status(500).json({ success:false , message:"An error occured" })
 
        } 
 }
@@ -208,7 +216,7 @@ const resendOTP = async (req,res)=>{
             
         }
         else{
-            res.status(500),json({ success: false,message: "Failed to resend OTP . Please try again"});
+            res.status(500).json({ success: false,message: "Failed to resend OTP . Please try again"});
         }
     } catch (error) {
         console.error("error occured while resending otp",error);
@@ -218,12 +226,48 @@ const resendOTP = async (req,res)=>{
 
 const loadLogin = async (req,res)=>{
     try {
-        
+        if(!req.session.user){
+            return res.render('login',{message:""})
+        }else{
+            res.redirect('/')
+        }
     } catch (error) {
-        
+        res.redirect("/pageNotFound")
     }
 }
 
+const pageNotFound = (req,res)=>{
+    res.render("error")
+}
+
+const login = async (req,res) => {
+    try {
+        const {email,password} = req.body;
+
+        const findUser = await User.findOne({email:email})
+      
+        if(!findUser){
+            return res.render("login",{message:"User not found"})
+        }
+
+        if(findUser.isBlocked){
+            return res.render("login",{message:"User is blocked by admin"})
+        }
+
+        const passwordMatch = await bcrypt.compare(password,findUser.password)
+
+        if(!passwordMatch) return res.render("login",{message:"Incorrect Password"})
+         
+        
+        req.session.user = findUser._id
+        res.redirect("/");
+    } catch (error) {
+        
+        console.error("Login error ",error);
+        res.send("login",{message:"login failed please try again later"})
+    }
+}
+ 
 module.exports = {
     loadHome,
     loadSignup,
@@ -236,5 +280,7 @@ module.exports = {
     signUp,
     verifyOTP,
     resendOTP,
-    loadLogin
+    loadLogin,
+    pageNotFound,
+    login
 } 
