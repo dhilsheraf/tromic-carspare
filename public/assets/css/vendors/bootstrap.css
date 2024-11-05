@@ -4087,7 +4087,7 @@ fieldset:disabled .btn {
   white-space: nowrap;
 }
 
-.dropdown-toggle::after {
+.dropdown-toggle {
   display: inline-block;
   margin-left: 0.255em;
   vertical-align: 0.255em;

@@ -711,7 +711,7 @@ b {
   top: 15px;
   margin-top: 0.6em;
   vertical-align: middle;
-  content: "";
+  /* content: ""; */
   border-top: 5px solid #adb5bd;
   border-right: 5px solid transparent;
   border-bottom: 0;
