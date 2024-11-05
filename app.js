@@ -3,6 +3,7 @@ const app = express();
 const path = require('path');
 const connectDB = require("./config/config")
 const userRoute = require("./routes/userRoute")
+const adminRoute = require("./routes/adminRoute")
 const session = require('express-session')
 require('dotenv').config()
 const bodyParser = require('body-parser'); 
@@ -17,7 +18,7 @@ app.use(session({
     resave:false,
     saveUninitialized:true,
     cookie:{
-        secure:false, 
+        secure:false,  
         httpOnly:true,
         maxAge:72*60*60*1000
     }
@@ -36,8 +37,8 @@ connectDB()
 
 
 app.use('/',userRoute) ;
-
+app.use('/admin',adminRoute)
   
 app.listen(PORT,()=>
 console.log(`Server is running on http://localhost:${PORT}`), 
-)       
+)         

@@ -12,7 +12,7 @@ router.set("views", "./views/user");
 
 
 
-
+ 
 //home about etc
 router.get("/",userController.loadHome) ;
 
@@ -48,6 +48,9 @@ router.post("/resend-otp",userController.resendOTP)
 //page not found
 router.get("/pageNotFound",userController.pageNotFound)
 
- 
+//logout
+router.get("/logout",userController.logout)
+
+
 module.exports = router ;  
    

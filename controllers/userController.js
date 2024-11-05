@@ -9,12 +9,19 @@ const { json } = require("express");
 
 const loadHome = async (req,res) =>{
     try {
-        res.render('home')
+        const user = req.session.user || null
+        if(user){
+            const userData = await User.findOne({_id:user._id})
+            res.render('home',{user})
+        }else{
+            res.render('home')
+        }
+        
     } catch (error) {
         console.error("Home page not loading",error);
         res.status(500).redirect("/pageNotFound")
     }
-}
+} 
 
 const loadAbout = async (req,res) =>{
     try {
@@ -243,7 +250,7 @@ const pageNotFound = (req,res)=>{
 const login = async (req,res) => {
     try {
         const {email,password} = req.body;
-
+        
         const findUser = await User.findOne({email:email})
       
         if(!findUser){
@@ -267,6 +274,25 @@ const login = async (req,res) => {
         res.send("login",{message:"login failed please try again later"})
     }
 }
+
+const logout = async (req,res) =>{
+    try {
+        
+        req.session.destroy((err)=>{
+            if(err){
+                console.log("Session destruction error",err.message);
+                return res.redirect("/pagNotFound")
+            }else{
+               return res.redirect("/login")
+            }
+        })
+
+    } catch (error) {
+        console.log("Logout error",error);
+        res.redirect("/pageNotFound")
+    }
+}
+ 
  
 module.exports = {
     loadHome,
@@ -282,5 +308,6 @@ module.exports = {
     resendOTP,
     loadLogin,
     pageNotFound,
-    login
+    login,
+    logout
 } 
