@@ -169,7 +169,7 @@ table thead th {
         <div class="screen-overlay"></div>
         <aside class="navbar-aside" id="offcanvas_aside">
             <div class="aside-top">
-                <a href="index.html" class="brand-wrap">
+                <a href="/admin/dashboard" class="brand-wrap">
                     <img src="/assets/imgs/theme/logo.svg" class="logo" alt="Nest Dashboard" />
                 </a>
                 <div>
@@ -179,41 +179,41 @@ table thead th {
             <nav>
                 <ul class="menu-aside">
                     <li class="menu-item">
-                        <a class="menu-link" href="index.html">
+                        <a class="menu-link" href="/admin/dashboard">
                             <i class="icon material-icons md-home"></i>
                             <span class="text">Dashboard</span>
                         </a>
                     </li>
                     <li class="menu-item has-submenu active">
-                        <a class="menu-link" href="page-products-list.html">
+                        <a class="menu-link" href="/admin/users">
                             <i class="icon material-icons md-person"></i>
                             <span class="text">Users</span>
                         </a>
                        
                     </li>
-                    <li class="menu-item has-submenu">
-                        <a class="menu-link" href="page-orders-1.html">
+                    <li class="menu-item ">
+                        <a class="menu-link" href="/admin/product">
                             <i class="icon material-icons md-shopping_cart"></i>
-                            <span class="text">Orders</span>
+                            <span class="text">Products</span>
                         </a>
                         
                     </li>
-                    <li class="menu-item has-submenu">
-                        <a class="menu-link" href="page-sellers-cards.html">
+                    <li class="menu-item ">
+                        <a class="menu-link" href="/admin/category">
                             <i class="icon material-icons md-store"></i>
-                            <span class="text">Sellers</span>
+                            <span class="text">Category</span>
                         </a>
                         
                     </li>
-                    <li class="menu-item has-submenu">
-                        <a class="menu-link" href="page-form-product-1.html">
+                    <li class="menu-item ">
+                        <a class="menu-link" href="#">
                             <i class="icon material-icons md-add_box"></i>
                             <span class="text">Add product</span>
                         </a>
                         
                     </li>
-                    <li class="menu-item has-submenu">
-                        <a class="menu-link" href="page-transactions-1.html">
+                    <li class="menu-item ">
+                        <a class="menu-link" href="#">
                             <i class="icon material-icons md-monetization_on"></i>
                             <span class="text">Transactions</span>
                         </a>
@@ -374,56 +374,61 @@ table thead th {
             </footer>
         </main>
         <script>
-
-               // Select the search input and table rows
-    const searchInput = document.getElementById("search-input");
-    const rows = document.querySelectorAll(".table-row");
-
-    // Add an event listener to handle search
-    searchInput.addEventListener("input", function() {
-        const searchText = searchInput.value.toLowerCase();
-
-        rows.forEach(row => {
-            // Check if any cell in the row contains the search text
-            const cells = row.getElementsByTagName("td");
-            let match = false;
-
-            for (let cell of cells) {
-                if (cell.textContent.toLowerCase().includes(searchText)) {
-                    match = true;
-                    break;
-                }
+            // Select the elements
+            const searchInput = document.getElementById("search-input");
+            const rows = document.querySelectorAll(".table-row");
+            const entriesSelect = document.getElementById("entries-select");
+            let entriesPerPage = parseInt(entriesSelect.value);
+            
+            // Add event listener for search input
+            searchInput.addEventListener("input", filterTable);
+            
+            // Add event listener for entries select dropdown
+            entriesSelect.addEventListener("change", function() {
+                entriesPerPage = parseInt(entriesSelect.value);
+                displayRows();
+            });
+            
+            // Function to filter rows based on search input
+            function filterTable() {
+                const searchText = searchInput.value.toLowerCase();
+            
+                rows.forEach(row => {
+                    const cells = row.getElementsByTagName("td");
+                    let match = false;
+            
+                    for (let cell of cells) {
+                        if (cell.textContent.toLowerCase().includes(searchText)) {
+                            match = true;
+                            break;
+                        }
+                    }
+            
+                    row.style.display = match ? "" : "none";
+                });
+            
+                displayRows();  // Reapply row display based on selected entries per page
             }
-
-            // Show or hide the row based on the match result
-            row.style.display = match ? "" : "none";
-        });
-    });
-
-
-    // block unblock
-
-document.querySelectorAll('.block-btn').forEach(button => {
-    button.addEventListener('click',async function() {
-        const userId = this.getAttribute('data-user-id');
-        const action = this.innerText.toLowerCase();
-
-        const response = await fetch(`/admin/users/${action}/${userId}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        })
-        const result = await response.json();
-        if (result.success) {
-            // Optionally, refresh the page or update the button text
-            this.innerText = action === 'block' ? 'Unblock' : 'Block';
-        } else {
-            alert(result.message);
-        }
-    });
-});
-        </script>
+            
+            // Function to paginate and display only the selected number of rows
+            function displayRows() {
+                const visibleRows = Array.from(rows).filter(row => row.style.display !== "none");
+            
+                const totalPages = Math.ceil(visibleRows.length / entriesPerPage);
+                let currentPage = 1;
+            
+                visibleRows.forEach((row, index) => {
+                    const startIndex = (currentPage - 1) * entriesPerPage;
+                    const endIndex = currentPage * entriesPerPage;
+            
+                    // Show rows within the page range
+                    row.style.display = (index >= startIndex && index < endIndex) ? "" : "none";
+                });
+            }
+            
+            // Initialize the table by showing the first set of rows
+            displayRows();
+            </script>
         <script src="/assets/js/vendors/jquery-3.6.0.min.js"></script>
         <script src="/assets/js/vendors/bootstrap.bundle.min.js"></script>
         <script src="/assets/js/vendors/select2.min.js"></script>

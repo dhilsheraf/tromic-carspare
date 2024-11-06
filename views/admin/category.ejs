@@ -14,6 +14,125 @@
         <link rel="shortcut icon" type="image/x-icon" href="/assets/imgs/theme/favicon.svg" />
         <!-- Template CSS -->
         <link href="/assets/css/main.css?v=1.1" rel="stylesheet" type="text/css" />
+        <style>
+            .table-title {
+                font-size: 1.5em;
+                font-weight: 600;
+                margin-bottom: 20px;
+            }
+        
+            .category-table thead th {
+                background-color: #f8f9fa;
+                text-align: left;
+                font-weight: 600;
+            }
+        
+            .category-table tbody td, .category-table tbody th {
+                vertical-align: middle;
+            }
+        
+            .badge-success {
+                background-color: #28a745;
+                color: white;
+                padding: 5px 10px;
+                border-radius: 5px;
+            }
+        
+            .btn-success {
+                color: white;
+                background-color: #28a745;
+                border: none;
+            }
+        
+            .table-responsive {
+                overflow-x: auto;
+            }
+        
+            /* Responsive adjustments */
+            @media (max-width: 768px) {
+                .table-title {
+                    font-size: 1.25em;
+                }
+                .category-table th, .category-table td {
+                    font-size: 0.9em;
+                }
+                .category-table .btn {
+                    font-size: 0.8em;
+                    padding: 5px 10px;
+                }
+            }
+
+
+            .table-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+/* Align the entries control to the left */
+.entries-control {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+/* Align the search bar to the right */
+.search-control {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+/* Ensure the table is responsive */
+.table-responsive {
+    overflow-x: auto;
+}
+
+/* Ensure the table looks good on small screens */
+@media (max-width: 768px) {
+    .content-main {
+        padding: 15px;
+    }
+
+    .table-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .entries-control,
+    .search-control {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .search-control input {
+        width: 100%;
+    }
+}
+
+
+/* Style the search bar */
+.search-control input {
+    width: 250px; /* Set a default width */
+    padding: 10px 15px; /* Add padding for better spacing */
+    font-size: 14px; /* Set a reasonable font size */
+    border: 2px solid #ccc; /* Light border color */
+    border-radius: 5px; /* Rounded corners */
+    outline: none; /* Remove default outline on focus */
+    transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Add smooth transitions */
+}
+
+
+/* Ensure responsiveness */
+@media (max-width: 768px) {
+    .search-control input {
+        width: 100%; /* Make the input full width on smaller screens */
+    }
+}
+        </style>
     </head>
 
     <body>
@@ -130,7 +249,7 @@
                             </div>
                         </li>
                         <li class="dropdown nav-item">
-                            <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownAccount" aria-expanded="false"> <img class="img-xs rounded-circle" src="assets/imgs/people/avatar-2.png" alt="User" /></a>
+                            <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownAccount" aria-expanded="false"> <img class="img-xs rounded-circle" src="/assets/imgs/people/avatar-2.png" alt="User" /></a>
                             <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownAccount">
                                 <a class="dropdown-item" href="#"><i class="material-icons md-perm_identity"></i>Edit Profile</a>
                                 <a class="dropdown-item" href="#"><i class="material-icons md-settings"></i>Account Settings</a>
@@ -145,33 +264,78 @@
                 </div>
             </header>
             <section class="content-main">
-                <div class="content-header">
-                    <h2 class="content-title">Sellers cards</h2>
-                    <div>
-                        <a href="#" class="btn btn-primary"><i class="material-icons md-plus"></i> Create new</a>
-                    </div>
-                </div>
+              
                 <div class="card mb-4">
-                    <header class="card-header">
-                        <div class="row gx-3">
-                            <div class="col-lg-4 col-md-6 me-auto">
-                                <input type="text" placeholder="Search..." class="form-control" />
-                            </div>  
-                        </div>
-                    </header>
+                    
                     <!-- card-header end// -->
                     <div class="card-body">
-                        <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-4">
-                            
-                           <h1>type from here bodyy</h1>
-
-                        </div>
-                        <!-- row.// -->
+                        <section class="content-main">
+                            <div class="content-header">
+                                <h2 class="content-title">Category List</h2>
+                                <a href="/admin/category/add" class="btn btn-primary"><i class="material-icons md-plus"></i> Add Category</a>
+                            </div>
+                        
+                            <div class="table-header">
+                                <div class="entries-control">
+                                    Show 
+                                    <select id="entries-select">
+                                        <option value="10">10</option>
+                                        <option value="25">25</option>
+                                        <option value="50">50</option>
+                                        <option value="100">100</option>
+                                    </select>
+                                    entries
+                                </div>
+                                <div class="search-control">
+                                    Search: 
+                                    <input type="text" id="search-input" placeholder="Type to search...">
+                                </div>
+                            </div>
+                        
+                            <div class="card">
+                                <div class="table-responsive">
+                                    <table class="table category-table">
+                                        <thead>
+                                            <tr>
+                                                <th>No.</th>
+                                                <th>Category Name</th>
+                                                <th>Description</th>
+                                                <th>Status</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="category-table-body">
+                                            <% if (categories.length > 0) { %>
+                                                <% categories.forEach((category, index) => { %>
+                                                    <tr class="table-row">
+                                                        <td><%= index + 1 %></td>
+                                                        <td><%= category.name %></td>
+                                                        <td><%= category.description %></td>
+                                                        <td>
+                                                            <button class="status-btn  btn btn-success btn-sm" data-category-id="<%= category._id %>">
+                                                                <%= category.isActive ? 'Deactivate' : 'Activate' %>
+                                                            </button>
+                                                        </td>
+                                                        <td>
+                                                            <a href="/admin/category/edit/<%= category._id %>" class="btn btn-success btn-sm">Edit</a>
+                                                        </td>
+                                                    </tr>
+                                                <% }); %>
+                                            <% } else { %>
+                                                <tr>
+                                                    <td colspan="5" class="text-center">No categories found</td>
+                                                </tr>
+                                            <% } %>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </section>
                     </div>
                     <!-- card-body end// -->
                 </div>
                 <!-- card end// -->
-                <div class="pagination-area mt-15 mb-50">
+                <!-- <div class="pagination-area mt-15 mb-50">
                     <nav aria-label="Page navigation example">
                         <ul class="pagination justify-content-start">
                             <li class="page-item active"><a class="page-link" href="#">01</a></li>
@@ -184,7 +348,7 @@
                             </li>
                         </ul>
                     </nav>
-                </div>
+                </div> -->
             </section>
             <!-- content-main end// -->
             <footer class="main-footer font-xs">
@@ -208,5 +372,97 @@
         <script src="/assets/js/vendors/jquery.fullscreen.min.js"></script>
         <!-- Main Script -->
         <script src="/assets/js/main.js?v=1.1" type="text/javascript"></script>
+
+        <script>
+            const searchInput = document.getElementById("search-input");
+const rows = document.querySelectorAll(".table-row");
+const entriesSelect = document.getElementById("entries-select");
+let entriesPerPage = parseInt(entriesSelect.value);
+
+// Add event listener for search input
+searchInput.addEventListener("input", filterTable);
+
+// Add event listener for entries select dropdown
+entriesSelect.addEventListener("change", function() {
+    entriesPerPage = parseInt(entriesSelect.value);
+    displayRows();
+});
+
+// Function to filter rows based on search input
+function filterTable() {
+    const searchText = searchInput.value.toLowerCase();
+
+    rows.forEach(row => {
+        const cells = row.getElementsByTagName("td");
+        let match = false;
+
+        for (let cell of cells) {
+            if (cell.textContent.toLowerCase().includes(searchText)) {
+                match = true;
+                break;
+            }
+        }
+
+        row.style.display = match ? "" : "none";
+    });
+
+    displayRows();  // Reapply row display based on selected entries per page
+}
+
+// Function to paginate and display only the selected number of rows
+function displayRows() {
+    const visibleRows = Array.from(rows).filter(row => row.style.display !== "none");
+
+    const totalPages = Math.ceil(visibleRows.length / entriesPerPage);
+    let currentPage = 1;
+
+    visibleRows.forEach((row, index) => {
+        const startIndex = (currentPage - 1) * entriesPerPage;
+        const endIndex = currentPage * entriesPerPage;
+
+        // Show rows within the page range
+        row.style.display = (index >= startIndex && index < endIndex) ? "" : "none";
+    });
+}
+
+// Initialize the table by showing the first set of rows
+displayRows();
+
+
+   // Select all category status buttons
+   const statusButtons = document.querySelectorAll('.status-btn');
+
+statusButtons.forEach(button => {
+    button.addEventListener('click', async function() {
+        const categoryId = this.getAttribute('data-category-id');
+        const buttonText = this.textContent.trim();
+
+        try {
+            // Send an AJAX request to the backend to toggle the status
+            const response = await fetch(`/admin/category/${categoryId}/toggle-status`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            });
+
+            if (response.ok) {
+                // Update the button text based on the response
+                const data = await response.json();
+                this.textContent = data.status === 'Active' ? 'Deactivate' : 'Activate';
+            } else {
+                const errorData = await response.text();
+                console.error('Error response:', errorData)
+                alert('Failed to update category status');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('An error occurred');
+        }
+    });
+});
+        </script>
+        
+
     </body>
 </html>

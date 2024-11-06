@@ -80,20 +80,11 @@ const blockunblock = async (req, res) => {
     }
 }
 
-const loadCategory = async (rreq,res)=> {
-    try {
-        res.render("admin/category");
-    } catch (error) {
-        console.log(error.message);
-        res.render('admin/404')
-    }
-}
 
 module.exports = {
     loadAdminLogin,
     adminLogin,
     loadAdminDashboard,
     loadUsers,
-    blockunblock,
-    loadCategory
+    blockunblock
 }

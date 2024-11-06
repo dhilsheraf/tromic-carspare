@@ -38,7 +38,11 @@ connectDB()
 
 app.use('/',userRoute) ;
 app.use('/admin',adminRoute)
-  
+
+app.get('/test',(req,res)=>{
+    res.render("admin/product")
+})
+
 app.listen(PORT,()=>
 console.log(`Server is running on http://localhost:${PORT}`), 
 )         
