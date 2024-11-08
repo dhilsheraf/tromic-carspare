@@ -3,6 +3,7 @@ const nodemailer = require('nodemailer')
 const bcrypt = require("bcrypt");
 const env = require('dotenv');
 const { json } = require("express");
+const Product = require("../models/productModel")
  
 //route to home 
 
@@ -162,7 +163,7 @@ const securePassword = async (password) => {
        return passwordHash;
 
     } catch (error) {
-         
+         console.error("error ocured while hasing password")
 
     }
 }
@@ -292,6 +293,16 @@ const logout = async (req,res) =>{
         res.redirect("/pageNotFound")
     }
 }
+
+const loadProduct = async (req,res) => {
+    try {
+        const products = await Product.find(); // Fetch all products from the database
+        res.render('shop', { products });  // Send the products to the EJS template
+      } catch (err) {
+        console.error(err);
+        res.status(500).send('Server error');
+      }
+}
  
  
 module.exports = {
@@ -309,5 +320,6 @@ module.exports = {
     loadLogin,
     pageNotFound,
     login,
-    logout
+    logout,
+    loadProduct
 } 

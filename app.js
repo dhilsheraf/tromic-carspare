@@ -29,20 +29,23 @@ app.use(passport.session())
 
 app.use(bodyParser.json()); 
 app.set('view engine','ejs')
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('/uploads/products', express.static('uploads/products'));
+ 
+ 
 app.use(express.static(path.join(__dirname, 'public')));
 app.set('views', path.join(__dirname, 'views')); 
 app.use(express.urlencoded({ extended: true }));
 
-connectDB()
-
-
+connectDB()  
+  
+ 
 app.use('/',userRoute) ;
 app.use('/admin',adminRoute)
-
 app.get('/test',(req,res)=>{
-    res.render("admin/product")
+    res.render('user/shop')
 })
-
+ 
 app.listen(PORT,()=>
 console.log(`Server is running on http://localhost:${PORT}`), 
-)         
+)                 
